@@ -99,10 +99,7 @@ class DuplicateFileRemover(object):
             symlink_path = self._symlink_folder.joinpath(symlink_name)
             file_size, _ = MetadataStorage.get_file_metadata(original_path)
             if not self._dry_run:
-                with original_path.open('rb') as orig_fh:
-                    with symlink_path.open('wb') as symlink_fh:
-                        self._copy_func(
-                            orig_fh, symlink_fh, max_bytes=file_size)
+                original_path.rename(symlink_path)
             if self._dry_run or self._verbose:
                 print(f'Created symlink {symlink_name} with '
                       f'checksum {checksum_digest}')
