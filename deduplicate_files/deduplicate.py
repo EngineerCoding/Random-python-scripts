@@ -95,7 +95,7 @@ class DuplicateFileRemover(object):
         :rtype: Path
         """
         if symlink_path is None:
-            symlink_name = str(uuid.uuid4())
+            symlink_name = f'{uuid.uuid4()}{original_path.suffix}'
             symlink_path = self._symlink_folder.joinpath(symlink_name)
             file_size, _ = MetadataStorage.get_file_metadata(original_path)
             if not self._dry_run:
