@@ -49,7 +49,7 @@ def right_strip_file(file_path: Union[Path, str]) -> str:
     :rtype: str
     """
     file_path = to_path(file_path)
-    if file_path.is_file():
+    if not file_path.is_file():
         return 'not a file'
     mime_type = from_file(str(file_path), mime=True)
     if not mime_type.startswith('text/'):
