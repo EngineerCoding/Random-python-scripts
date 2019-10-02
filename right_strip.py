@@ -58,7 +58,12 @@ def right_strip_file(file_path: Union[Path, str]) -> str:
     temporary_file = NamedTemporaryFile(delete=False)
     with file_path.open('r') as file_in, temporary_file as file_out:
         right_strip(file_in, _BinaryFileWrapper(file_out))
-    os.rename(temporary_file.name, str(file_path))
+    try:
+        os.rename(temporary_file.name, str(file_path))
+    except PermissionError:
+        pass
+    finally:
+        temporary_file.close()
     return 'success'
 
 
