@@ -68,7 +68,7 @@ class PythonExecutable(Executable):
         return cls._location
 
     def run_python_command(self, *args, python_exec: Optional[
-        str] = None) -> subprocess.CompletedProcess:
+            str] = None) -> subprocess.CompletedProcess:
         if not python_exec:
             python_exec = self._python_executable
         return subprocess.run([
@@ -78,7 +78,7 @@ class PythonExecutable(Executable):
         dir_name = os.path.dirname(self._output_file)
         virtual_env = os.path.join(dir_name, '.python-deps')
         if not os.path.isdir(virtual_env):
-            result = self.run_python_command('venv', virtual_env)
+            result = self.run_python_command('virtualenv', virtual_env)
             if result.returncode != 0:
                 print('Non-zero return code for creating virtualenv!')
                 sys.exit(1)
