@@ -32,8 +32,12 @@ def right_strip(file_in: TextIO, file_out: TextIO):
     :param file_out: The file object to write to
     :type file_out: TextIO
     """
-    for line in file_in:
-        file_out.write(f'{line.rstrip()}\n')
+    try:
+        for line in file_in:
+            file_out.write(f'{line.rstrip()}\n')
+    except UnicodeDecodeError:
+        return False
+    return True
 
 
 def right_strip_file(file_path: Union[Path, str]) -> str:
@@ -57,7 +61,10 @@ def right_strip_file(file_path: Union[Path, str]) -> str:
 
     temporary_file = NamedTemporaryFile(delete=False)
     with file_path.open('r') as file_in, temporary_file as file_out:
-        right_strip(file_in, _BinaryFileWrapper(file_out))
+        if not right_strip(file_in, _BinaryFileWrapper(file_out)):
+            temporary_file.close()
+            return
+    # Move the temporary file
     try:
         os.rename(temporary_file.name, str(file_path))
     except PermissionError:
